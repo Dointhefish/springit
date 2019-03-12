@@ -1,6 +1,10 @@
 package com.bowers.springit;
 
 import com.bowers.springit.config.SpringitProperties;
+import com.bowers.springit.domain.Comment;
+import com.bowers.springit.domain.Link;
+import com.bowers.springit.repository.CommentRepository;
+import com.bowers.springit.repository.LinkRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -20,13 +24,15 @@ public class SpringitApplication {
 	}
 
 	@Bean
-	CommandLineRunner runner() {
+	CommandLineRunner runner(LinkRepository linkRepository, CommentRepository commentRepository) {
 		return args -> {
-			log.error("CommandLineRunner.run();");
-			log.warn("CommandLineRunner.run();");
-			log.info("CommandLineRunner.run();");
-			log.debug("CommandLineRunner.run();");
-			log.trace("CommandLineRunner.run();");
+			Link link = new Link("Getting Started with Spring Boot 2","https://therealdanvega.com/spring-boot-2");
+			linkRepository.save(link);
+
+			Comment comment = new Comment("This Spring Boot 2 link rocks!", link);
+			commentRepository.save(comment);
+			link.addComment(comment);
+
 		};
 	}
 }
